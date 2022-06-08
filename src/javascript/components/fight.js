@@ -2,8 +2,89 @@ import { controls } from '../../constants/controls';
 
 export async function fight(firstFighter, secondFighter) {
   return new Promise((resolve) => {
-    // resolve the promise with the winner when fight is over
+    const leftHealthIndicator = document.getElementById('left-fighter-indicator');
+    const rightHealthIndicator = document.getElementById('right-fighter-indicator');
+    // State fight players
+    const state = {
+      playerOne: { isCriticalHit: true, isBlock: false,  ...firstFighter },
+      playerTwo: { isCriticalHit: true, isBlock: false,  ...secondFighter }
+    };
+    // 
+    let pressed = new Set();
 
+    document.addEventListener('keydown', (event) => {
+      pressed.add(event.code);
+      // Hit event
+      switch(event.code) {
+        case controls.PlayerOneAttack:
+          if (!state.playerOne.isBlock) {
+            state.playerTwo.health -= getDamage(state.playerOne, state.playerTwo);
+          }
+          break;
+        case controls.PlayerOneBlock:
+          state.playerOne.isBlock = true;
+          break;
+        case controls.PlayerTwoAttack:
+          if (!state.playerTwo.isBlock) {
+            state.playerOne.health -= getDamage(state.playerTwo, state.playerOne);
+          }
+          break;
+        case controls.PlayerTwoBlock:
+          state.playerTwo.isBlock = true;
+          break;
+        default:
+          break;
+      }
+      // Critical Hit Combination event
+      if (pressed.size === 3) {
+        const playerCriticalHit = controls.PlayerOneCriticalHitCombination
+          .every((code) => pressed.has(code)) ? 'playerOne' : 'playerTwo';
+
+        switch(playerCriticalHit) {
+          case 'playerOne':
+            if (state.playerOne.isCriticalHit && !state.playerOne.isBlock) {
+              state.playerTwo.health -= criticalHit(state.playerOne);
+              state.playerOne.isCriticalHit = false;
+              reloadCriticalHit(state.playerOne);
+            } 
+            break;
+          case 'playerTwo':
+            if (state.playerTwo.isCriticalHit && !state.playerTwo.isBlock) {
+              state.playerOne.health -= criticalHit(state.playerTwo);
+              state.playerTwo.isCriticalHit = false;
+              reloadCriticalHit(state.playerTwo);
+            }
+            break;
+          default:
+            break;
+        }
+      }
+      const healthIndicatorPlayerOne = healthIndicator(state.playerOne.health, firstFighter.health);
+      const healthIndicatorPlayerTwo = healthIndicator(state.playerTwo.health, secondFighter.health);
+      // Render players healthIndicator
+      leftHealthIndicator.style.width = healthIndicatorPlayerOne;
+      rightHealthIndicator.style.width = healthIndicatorPlayerTwo;
+      // resolve the promise with the winner when fight is over
+      if (healthIndicatorPlayerOne === 0 || healthIndicatorPlayerTwo === 0) {
+        healthIndicatorPlayerOne ? resolve(firstFighter) : resolve(secondFighter);
+      } 
+    })
+
+    document.addEventListener('keyup', (event) => {
+      pressed.delete(event.code);
+    // Remove player`s block event
+      switch(event.code) {
+        case controls.PlayerOneBlock:
+          state.playerOne.isBlock = false;
+          break;
+        case controls.PlayerTwoBlock:
+          state.playerTwo.isBlock = false;
+          break;
+        default:
+          break;
+      }
+    });
+  
   });
 }
 export function criticalHit(fighter) {
