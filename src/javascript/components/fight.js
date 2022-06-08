@@ -87,6 +87,18 @@ export async function fight(firstFighter, secondFighter) {
   
   });
 }
+
+export function healthIndicator(currentlyHealth, basedHealth) {
+  // return player health
+  const indicator = currentlyHealth * 100 / basedHealth;
+  return indicator > 0 ? `${indicator}%` : 0;
+}
+
+export function reloadCriticalHit(player) {
+  // reload critical hit
+  setTimeout(() => player.isCriticalHit = true, 10000);
+}
+
 export function criticalHit(fighter) {
   const { attack } = fighter;
   return attack * 2;
