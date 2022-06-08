@@ -14,4 +14,13 @@
 
 .fighter-preview___img {
   height: 250px;
+  margin: 0 auto;
+}
+
+.fighter-preview___info {
+  padding: 5px;
+  margin: 0 auto;
+  list-style: none;
+  background: #ffdfa7;
+  border: 5px solid #ca9650;
 }
