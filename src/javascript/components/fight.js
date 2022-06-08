@@ -36,10 +36,9 @@ export async function fight(firstFighter, secondFighter) {
           break;
       }
       // Critical Hit Combination event
-      if (pressed.size === 3) {
+      if (pressed.size >= 3) {
         const playerCriticalHit = controls.PlayerOneCriticalHitCombination
           .every((code) => pressed.has(code)) ? 'playerOne' : 'playerTwo';
-
         switch(playerCriticalHit) {
           case 'playerOne':
             if (state.playerOne.isCriticalHit && !state.playerOne.isBlock) {
@@ -107,8 +106,9 @@ export function criticalHit(fighter) {
 
 export function getDamage(attacker, defender) {
   // return damage
-  const damage = defender.isBlock ? getHitPower(attacker) - getBlockPower(defender) : getHitPower(attacker);
-  return damage > 0 ? damage : 0;
+  const damage = getHitPower(attacker) - getBlockPower(defender)
+  const isBlockedDamage = defender.isBlock && defender.defense > damage.attack;
+  return isBlockedDamage || Math.sign(damage) === -1 ? 0 : damage;
 }
 
 export function getHitPower(fighter) {
