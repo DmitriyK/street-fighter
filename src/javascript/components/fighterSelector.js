@@ -25,9 +25,13 @@ export async function getFighterInfo(fighterId) {
   if (fighterDetailsMap.has(fighterId)) {
     return fighterDetailsMap.get(fighterId);
   } else {
-    const fighterInfo = await fighterService.getFighterDetails(fighterId);
-    fighterDetailsMap.set(fighterInfo._id, fighterInfo);
-    return fighterInfo;
+    try {
+      const fighterInfo = await fighterService.getFighterDetails(fighterId);
+      fighterDetailsMap.set(fighterInfo._id, fighterInfo);
+      return fighterInfo;
+    } catch (error) {
+      console.warn(error);
+    }
   }
 }
 
