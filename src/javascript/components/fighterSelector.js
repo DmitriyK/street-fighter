@@ -26,7 +26,7 @@ export async function getFighterInfo(fighterId) {
     return fighterDetailsMap.get(fighterId);
   } else {
     const fighterInfo = await fighterService.getFighterDetails(fighterId);
-    fighterDetailsMap.set(fighterInfo);
+    fighterDetailsMap.set(fighterInfo._id, fighterInfo);
     return fighterInfo;
   }
 }
