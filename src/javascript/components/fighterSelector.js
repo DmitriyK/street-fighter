@@ -22,6 +22,7 @@ const fighterDetailsMap = new Map();
 
 export async function getFighterInfo(fighterId) {
   // get fighter info from fighterDetailsMap or from service and write it to fighterDetailsMap
+  const fightersPreview = document.querySelector('.preview-container___root');
   if (fighterDetailsMap.has(fighterId)) {
     return fighterDetailsMap.get(fighterId);
   } else {
@@ -31,6 +32,7 @@ export async function getFighterInfo(fighterId) {
       return fighterInfo;
     } catch (error) {
       console.warn(error);
+      fightersPreview.innerText = 'Failed to load data';
     }
   }
 }
