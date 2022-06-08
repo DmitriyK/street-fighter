@@ -106,7 +106,7 @@ export function criticalHit(fighter) {
 
 export function getDamage(attacker, defender) {
   // return damage
-  const damage = getHitPower(attacker) - getBlockPower(defender);
+  const damage = defender.isBlock ? getHitPower(attacker) - getBlockPower(defender) : getHitPower(attacker);
   return damage > 0 ? damage : 0;
 }
 
