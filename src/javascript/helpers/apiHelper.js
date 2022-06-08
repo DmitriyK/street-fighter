@@ -1,7 +1,7 @@
 import { fightersDetails, fighters } from './mockData';
 
 const BASE_API_URL =
-  'https://api.github.com/repos/binary-studio-academy/stage-2-es6-for-everyone/contents/resources/api/';
+  'https://api.github.com/repos/DmitriyK/street-fighter/contents/resources/api/';
 const SECURITY_HEADERS = {
   headers: {
     /*
@@ -9,11 +9,11 @@ const SECURITY_HEADERS = {
      * To test the application against the real dataset set useMockAPI=false.
      * But to test the application you don't need to extend the GitHub REST API rate limit to 5000 requests with the token
      */
-    // authorization: 'token %github_token%'
+    authorization: 'token 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'
   }
 };
 
-const useMockAPI = true;
+const useMockAPI = false;
 
 export async function callApi(endpoint, method = 'GET') {
   const url = BASE_API_URL + endpoint;
