@@ -100,6 +100,7 @@ export function reloadCriticalHit(player) {
 }
 
 export function criticalHit(fighter) {
+  // return critical hit
   const { attack } = fighter;
   return attack * 2;
 }
